@@ -21,7 +21,7 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         try {
-            if(auth()->user()->hasPermission('employees index')){
+            if(auth()->user()->hasPermission('admin employees index')){
                 if ($request->all()){
                     $user_id = $request->user_id;
                     $status = $request->status;
@@ -72,7 +72,7 @@ class EmployeeController extends Controller
                 $designation_id = 0;
                 $designations = Designation::where('status',1)->get();
                 $userss = User::latest()->whereNotIn('role',['admin'])->get();
-                $users = User::latest()->whereNotIn('role',['admin'])->get();
+                $users = $userss;
                 $roles = Role::where('status',1)->get();
                 return view('admin.user.index',compact('designations','users','roles','userss','user_id','designation_id','type','status'));
             }

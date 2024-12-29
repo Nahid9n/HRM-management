@@ -2,7 +2,7 @@
 @section('title','Employee Management')
 @section('body')
     <div class="row">
-        <form method="get" action="{{ route('employees.index') }}">
+        <form method="get" action="{{ route('admin.employees.index') }}">
             <div class="row">
                 <div class="col my-2">
                     <div class="card ">
@@ -83,7 +83,9 @@
             <div class="card border-0 mb-4 no-bg">
                 <div class="card-header py-3 px-0 d-sm-flex align-items-center  justify-content-between border-bottom">
                     <h3 class="fw-bold flex-fill mb-0 mt-sm-0 text-white">Employee</h3>
+                    @if(auth()->user()->hasPermission('admin employees store'))
                     <button type="button" class="btn btn-dark me-1 mt-1 w-sm-100" data-bs-toggle="modal" data-bs-target="#createemp"><i class="icofont-plus-circle me-2 fs-6"></i>Add Employee</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -96,7 +98,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="">
+                        @if(auth()->user()->hasPermission('admin employees update'))
                         <button class="btn btn-toolbar float-start" data-bs-toggle="modal" data-bs-target="#editEmp{{$key}}"><i class="icofont-edit text-success"></i></button>
+                        @endif
+                        @if(auth()->user()->hasPermission('admin user ban unban'))
                         <form action="{{route('admin.user.ban.unban',$user->id)}}" method="post">
                             @csrf
                             @if($user->status == 0)
@@ -108,11 +113,12 @@
                                 <button class="float-end btn btn-toolbar"><i class="text-success icofont-stop"></i></button>
                             @endif
                         </form>
+                        @endif
                     </div>
                     <div class="text-center">
                         <a href="{{route('employee.profile',$user->id)}}">
                             @if($user->userInfo->image == '')
-                                <img src="{{asset('/')}}admin/assets/images/lg/avatar3.jpg" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
+                                <img src="{{asset('/')}}admin/assets/images/lg/{{$user->userInfo->gender == '1' ? 'avatar5.jpg':''}}{{$user->userInfo->gender == '2' ? 'avatar2.jpg':''}}{{$user->userInfo->gender == '3' ? 'avatar4.jpg':''}}" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
                             @else
                                 <img src="{{asset($user->userInfo->image)}}" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
                             @endif
@@ -134,7 +140,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{route('employees.update',$user->id)}}" method="post">
+                            <form action="{{route('admin.employees.update',$user->id)}}" method="post">
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-3">
@@ -240,7 +246,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{route('employees.store')}}" method="post">
+                    <form action="{{route('admin.employees.store')}}" method="post">
                         @csrf
                         <div class="mb-3">
                             <label for="exampleFormControlInput877" class="form-label">Employee Name <span class="text-danger">*</span></label>

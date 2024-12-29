@@ -3,7 +3,6 @@
 
 
 <head>
-
     @if(auth()->user()->role =='admin')
     @include('admin.layout.meta')
     <!-- Favicon-->
